@@ -8,7 +8,7 @@ function calcular_energia_sinal()
     expr = strsubst(expr, "^", ".^");
 
     // Define o vetor de tempo n
-    n = 0:100;
+    n = 0:0.1:100;
     m = 1;
 
     // Cria a função anônima com deff
@@ -21,7 +21,8 @@ function calcular_energia_sinal()
     end
     
     // Cálculo da energia do sinal
-    energia = sum(sinal_n .^ 2);
+    //energia = sum(sinal_n .^ 2);
+    energia = inttrap(n, (sinal_n) .^2);
     
     // Exibindo a energia no campo de texto
     h_energia = findobj("Tag", "energia_output");
@@ -50,7 +51,7 @@ endfunction
     hg.info_message = 'Professor Dr. Francisco Aquino.'
     // Plotando o gráfico do sinal
     clf;
-    subplot(2, 1, 1);
+    subplot(1, 1, 1);
     plot(n, sinal_n, "-o", "LineWidth", 2, "MarkerSize", 3);
     title("Sinal no Tempo");
     xlabel("n");
@@ -58,12 +59,14 @@ endfunction
     xgrid;
     
     // Exibindo o valor da energia no segundo gráfico
+    /*
     subplot(2, 1, 2);
     bar(m, energia, 0.05);
     title("Energia do Sinal");
     xlabel("");
     ylabel("Energia");
-    xgrid; 
+    xgrid;
+    */ 
 
 // simulacao - transmitindo o sinal:
 buttonf = uicontrol(hg, "Position", [xlargura-80 xaltura-22 75 20], ...
