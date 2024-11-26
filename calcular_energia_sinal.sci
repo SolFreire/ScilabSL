@@ -1,5 +1,4 @@
 function calcular_energia_sinal()
-    
     h_exp = findobj("Tag", "expr_input");
     expr = get(h_exp, "String");
 
@@ -9,7 +8,8 @@ function calcular_energia_sinal()
 
     // Define o vetor de tempo n
     n = 0:0.1:100;
-    m = 1;
+    funcprot(0);
+    deff('y = u(n)','y = (n>=0)');
 
     // Cria a função anônima com deff
     try
@@ -21,59 +21,42 @@ function calcular_energia_sinal()
     end
     
     // Cálculo da energia do sinal
-    //energia = sum(sinal_n .^ 2);
     energia = inttrap(n, (sinal_n) .^2);
     
     // Exibindo a energia no campo de texto
     h_energia = findobj("Tag", "energia_output");
     set(h_energia, "String", string(energia));
-
-  
-    
-/*Funcao Degrau
-function  sinal_n = u(n)
-    if n >= 0 then
-        
-         y = 1;
-         
-    else
-        
-         y=0;
-         
-    end
-endfunction
-    
-*/
     hg = figure();
     hg.figure_name = "Sistemas Lineares";
     xaltura = 450;   xlargura = 600;
     hg.position = [15 7 xlargura xaltura];
-    hg.info_message = 'Professor Dr. Francisco Aquino.'
+    set(hg, "Resize", "off");
+    
     // Plotando o gráfico do sinal
     clf;
-    subplot(1, 1, 1);
     plot(n, sinal_n, "-o", "LineWidth", 2, "MarkerSize", 3);
     title("Sinal no Tempo");
-    xlabel("n");
+    xlabel("Tempo");
     ylabel("Amplitude");
     xgrid;
-    
-    // Exibindo o valor da energia no segundo gráfico
-    /*
-    subplot(2, 1, 2);
-    bar(m, energia, 0.05);
-    title("Energia do Sinal");
-    xlabel("");
-    ylabel("Energia");
-    xgrid;
-    */ 
 
 // simulacao - transmitindo o sinal:
 buttonf = uicontrol(hg, "Position", [xlargura-80 xaltura-22 75 20], ...
-    "Style", "pushbutton", "FontWeight", "bold", "FontSize", 12, ...
+    "Style", "pushbutton", "FontWeight", "bold", "FontSize", 10.99, ...
     "String", "Fechar !", "Foregroundcolor",[0.9 0.1 0.1], "callback", "close();");
+endfunction
 
-
+//Funcao Degrau
+function y =u(n)
+    if n >= 0 then
+        
+         y = 1;
+        
+    else
+        
+         y = 0;
+        
+    end
 endfunction
 
 close;
@@ -81,12 +64,12 @@ clc();
     
 // Interface Gráfica
 f = figure();
+set(f, "Resize", "off"); 
 f.figure_name = "Cálculo de Energia de Sinal";
-f.position = [10, 10, 500, 250];
 
 // Título
-uicontrol(f, "Style", "text", "Position", [150, 200, 200, 30], ...
-    "String", "Cálculo de Energia de Sinal", "FontSize", 12, ...
+uicontrol(f, "Style", "text", "Position", [30, 200, 150, 30], ...
+    "String", "Cálculo de Energia de Sinal", "FontSize", 11, ...
     "FontWeight", "bold");
 
 // Campo de Entrada para Expressão do Sinal
@@ -102,7 +85,7 @@ energia_output = uicontrol(f, "Style", "text", "Position", [200, 100, 200, 20], 
     "String", "", "Tag", "energia_output", "BackgroundColor", [1, 1, 1]);
 
 // Botão para Calcular a Energia
-uicontrol(f, "Position", [200, 50, 100, 30], ...
+uicontrol(f, "Position", [140, 38, 100, 30], ...
     "Style", "pushbutton", "FontWeight", "bold", "FontSize", 12, ... 
     "String", "Calcular!", "Foregroundcolor",[0.1 0.1 1], "callback", "calcular_energia_sinal();");
 
