@@ -20,17 +20,17 @@ function transformacao_de_sinais_gui()
              "String", "Plotar", "Callback", "plotar_grafico()");
 endfunction
 
-function x_amplificado = amplificar(x)
-    x_amplificado = 2 * x;
+function y_amplificado = amplificar(y)
+    y_amplificado = 2 * y;
 endfunction
 
-function x_atenuado = atenuar(x)
-    x_atenuado = x / 2;
+function y_atenuado = atenuar(y)
+    y_atenuado = y / 2;
 endfunction
 
-function [x, t] = adiantar_tempo(x, t, delta_t)
+function [y, t2] = adiantar_tempo(y, t2, delta_t)
     // Adianta o tempo deslocando o vetor de tempo
-    t = t + delta_t;
+    t2 = t2 + delta_t;
 endfunction
 
 function aplicar_transformacao()
@@ -40,25 +40,30 @@ function aplicar_transformacao()
 
     // Definindo os vetores
     t3 = 0:0.1:2.9;
-    t5 = 3 + 0*(0:0.1:1.9);
+    t5 = 3 + 0.00001*(0:0.1:1.9);
     t6 = 18 - 3*(5:0.1:6);
+    
     x = [t3, t5, t6, 0*t6]; // Combinação dos vetores
-    t = 0:0.1:(length(x) - 1) * 0.1; // Vetor de tempo associado
+    y = [t3, t5, t6, 0*t6]; // Combinação dos vetores
+    
+    t1 = 0:0.1:(length(x) - 1) * 0.1; // Vetor de tempo associado
+    t2 = 0:0.1:(length(y) - 1) * 0.1; // Vetor de tempo associado
+
 
     // Aplicando a transformação escolhida
     select opcao
     case 2
-        x_transformado = amplificar(x);
+        y = amplificar(y);
     case 3
-        x_transformado = atenuar(x);
+        y = atenuar(y);
     case 4
-        [x_transformado, t] = adiantar_tempo(x, t, -1.0); // Adiantamento no tempo
+        [y, t2] = adiantar_tempo(y, t2, -2.0); // Adiantamento no tempo
     else
-        x_transformado = x; // Sem transformação (original)
+        y = x; // Sem transformação (original)
     end
 
     // Salvando os dados no ambiente gráfico
-    gcf().userdata = struct("x", x, "x_transformado", x_transformado, "t", t);
+    gcf().userdata = struct("x", x, "y", y, "t1", t1, "t2", t2);
 endfunction
 
 function plotar_grafico()
@@ -72,18 +77,16 @@ function plotar_grafico()
     end
 
     x = data.x;
-    x_transformado = data.x_transformado;
-    t = data.t;
+    y = data.y;
+    t1 = data.t1;
+    t2 = data.t2;
 
     // Criando o vetor tempo para a plotagem
-    t_total = t;
-    x2_transformado = x_transformado(1:2:$);
-    t2_total = t_total(1:2:$);
 
     // Plotando o gráfico com comparação
     clf(); // Limpa a janela de gráficos
-    plot(t_total, x, 'g-', t_total, x_transformado, 'b-', t2_total, x2_transformado, 'r--');
-    legend("x original", "x transformado", "x2 transformado");
+    plot(t1, x, 'g-', t2, y, 'b-');
+    legend("x ", "y");
     xlabel("Tempo (s)");
     ylabel("Amplitude");
     title("Comparação: Original e Transformado");
