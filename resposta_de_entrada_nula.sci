@@ -30,7 +30,7 @@ function resposta_de_entrada_nula()
         coeficientes = matriz \ vetorIn;
         C1 = coeficientes(1);
         C2 = coeficientes(2);
-        messagebox(msprintf("%.1f * e^(%.2f t) + (%.2f * e^(%.1f t))", C1, raiz1, C2, raiz2), "Resultado");
+        messagebox(msprintf("(%.1f * e^(%.2f t)) + (%.2f * e^(%.1f t))", C1, raiz1, C2, raiz2), "Resultado");
 
     else
         //Matriz do sistema
