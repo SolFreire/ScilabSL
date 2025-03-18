@@ -9,19 +9,29 @@ function resposta_de_entrada_nula()
 
     // Calculando as raízes da equação característica
     delta = b^2 - 4*a*c;
-    /*
-    if delta < 0 then
-        raiz1 = (-b + %i * sqrt(abs(delta))) / (2*a);
-        raiz2 = (-b - %i * sqrt(abs(delta))) / (2*a);
-        messagebox(msprintf("Raízes complexas:\nRaiz 1 = %.2f + %.2fi\nRaiz 2 = %.2f - %.2fi", ...
-                            real(raiz1), imag(raiz1), real(raiz2), imag(raiz2)));
-    end
-    */
     raiz1 = (-b + sqrt(delta)) / (2*a);
     raiz2 = (-b - sqrt(delta)) / (2*a);
+    alfa = real(raiz1);
+    bet = imag(raiz1);
+    
+    //Raizes complexas
+    if delta < 0 then
+        // Matriz do sistema
+        matriz = [1, 0; alfa, bet];
+        vetorIn = [y0; yd0];
+        
+        // Calculando coeficientes C1 e C2
+        coeficientes = matriz \ vetorIn;
+        C1 = coeficientes(1);
+        C2 = coeficientes(2);
+        C = sqrt(C1^2 + C2^2); // Amplitude
+        theta = atan(-C2, C1); // Angulo
+        
+        messagebox(msprintf("Solução:\ny(t) = %.2f * e^(%.2f t) * cos(%.2f t +(%.2f))", ...
+                            C, alfa, bet, theta), "Resultado");
 
-    // Exibir resultado
-    if raiz1 ~= raiz2 then
+    // Raizes diferentes
+    elseif raiz1 ~= raiz2 then
         // Matriz do sistema
         matriz = [1, 1; raiz1, raiz2];
         vetorIn = [y0; yd0];
@@ -30,8 +40,9 @@ function resposta_de_entrada_nula()
         coeficientes = matriz \ vetorIn;
         C1 = coeficientes(1);
         C2 = coeficientes(2);
-        messagebox(msprintf("(%.1f * e^(%.2f t)) + (%.2f * e^(%.1f t))", C1, raiz1, C2, raiz2), "Resultado");
-
+        messagebox(msprintf("%.1f * e^(%.2f t) + (%.2f * e^(%.1f t))", C1, raiz1, C2, raiz2), "Resultado");
+        
+    // Raizes iguais
     else
         //Matriz do sistema
         matriz = [1,0; raiz1,1];
